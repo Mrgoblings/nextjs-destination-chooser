@@ -9,3 +9,42 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  password  String?  // Make this optional for OAuth users
+  googleId  String?  @unique
+  githubId  String?  @unique // Add this for GitHub login
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  sites     Site[]
+  tokens    Token[]
+}
+
+model Token {
+  id       Int      @id @default(autoincrement())
+  userId   Int
+  token    String
+  expiresAt DateTime
+  user     User     @relation(fields: [userId], references: [id])
+}
+
+model Site {
+  id        Int           @id @default(autoincrement())
+  userId    Int
+  name      String
+  createdAt DateTime      @default(now())
+  user      User          @relation(fields: [userId], references: [id])
+  versions  SiteVersion[] // Add this to associate SiteVersions with this Site
+}
+
+model SiteVersion {
+  id      Int      @id @default(autoincrement())
+  siteId  Int
+  title String  // Markdown content for this version, optional now
+  path    String   // Path to the markdown file
+  createdAt DateTime @default(now())
+  site    Site     @relation(fields: [siteId], references: [id])
+}
+
