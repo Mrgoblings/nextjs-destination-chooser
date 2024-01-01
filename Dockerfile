@@ -13,10 +13,12 @@ RUN npm install
 # Copy the rest of the application code to the working directory
 COPY . .
 
-RUN npm run build
+# Build the application 
+#TODO: this causes 418 and 423 errors and the sites returns 404. fix later
+# RUN npm run build
 
 # Expose the port on which the application will run
 EXPOSE 3000
 
 # Start the application
-CMD ["npm", "start"]
+CMD ["npm", "dev"]
