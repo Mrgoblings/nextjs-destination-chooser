@@ -9,3 +9,44 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  password  String?
+  googleId  String?   @unique
+  trips     Trip[]
+}
+
+model Trip {
+  id              Int       @id @default(autoincrement())
+  userId          String
+  user            User      @relation(fields: [userId], references: [id])
+  departure       Location  @relation("DepartureLocation", fields: [departureId], references: [id])
+  departureId     Int
+  destination     Location  @relation("DestinationLocation", fields: [destinationId], references: [id])
+  destinationId   Int
+  transports      Transport[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Location {
+  id          Int       @id @default(autoincrement())
+  name        String
+  latitude    Float
+  longitude   Float
+  departures  Trip[]    @relation("DepartureLocation")
+  arrivals    Trip[]    @relation("DestinationLocation")
+}
+
+model Transport {
+  id          Int      @id @default(autoincrement())
+  tripId      Int
+  trip        Trip     @relation(fields: [tripId], references: [id])
+  type        String
+  price       Float
+  departureTime DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
