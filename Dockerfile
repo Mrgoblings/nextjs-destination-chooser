@@ -1,5 +1,5 @@
 # Specify the base image
-FROM node:14-alpine
+FROM node:21.4.0
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -12,6 +12,8 @@ RUN npm install
 
 # Copy the rest of the application code to the working directory
 COPY . .
+
+RUN npm run build
 
 # Expose the port on which the application will run
 EXPOSE 3000
