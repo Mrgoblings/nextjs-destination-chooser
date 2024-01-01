@@ -11,40 +11,41 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String   @unique
-  password  String?  // Make this optional for OAuth users
-  googleId  String?  @unique
-  githubId  String?  @unique // Add this for GitHub login
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  sites     Site[]
-  tokens    Token[]
+  id        String    @id @default(uuid())
+  email     String    @unique
+  googleId  String?   @unique
+  trips     Trip[]
 }
 
-model Token {
-  id       Int      @id @default(autoincrement())
-  userId   Int
-  token    String
-  expiresAt DateTime
-  user     User     @relation(fields: [userId], references: [id])
+model Trip {
+  id              Int       @id @default(autoincrement())
+  userId          String
+  user            User      @relation(fields: [userId], references: [id])
+  departure       Location  @relation("DepartureLocation", fields: [departureId], references: [id])
+  departureId     Int
+  destination     Location  @relation("DestinationLocation", fields: [destinationId], references: [id])
+  destinationId   Int
+  transports      Transport[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 }
 
-model Site {
-  id        Int           @id @default(autoincrement())
-  userId    Int
-  name      String
-  createdAt DateTime      @default(now())
-  user      User          @relation(fields: [userId], references: [id])
-  versions  SiteVersion[] // Add this to associate SiteVersions with this Site
+model Location {
+  id          Int       @id @default(autoincrement())
+  name        String
+  latitude    Float
+  longitude   Float
+  departures  Trip[]    @relation("DepartureLocation")
+  arrivals    Trip[]    @relation("DestinationLocation")
 }
 
-model SiteVersion {
-  id      Int      @id @default(autoincrement())
-  siteId  Int
-  title String  // Markdown content for this version, optional now
-  path    String   // Path to the markdown file
-  createdAt DateTime @default(now())
-  site    Site     @relation(fields: [siteId], references: [id])
+model Transport {
+  id          Int      @id @default(autoincrement())
+  tripId      Int
+  trip        Trip     @relation(fields: [tripId], references: [id])
+  type        String
+  price       Float
+  departureTime DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
-
