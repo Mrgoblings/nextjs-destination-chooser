@@ -12,6 +12,6 @@ export default function SearchPage({searchParams}: {
     console.log("q:", query);
     
     return (
-        <h1 className="text-primary text-center text-4xl py-7">You searched: '{query}'</h1>
+        <h1 className="text-primary text-center text-4xl py-7">You searched: {query}</h1>
     );
 }
