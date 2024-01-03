@@ -20,12 +20,13 @@ const SearchBar: React.FC<SearchBarProps> = ({ onFocus, onBlur }) => {
         } else {
             onBlur && onBlur();
         }
-        
+
         setIsClicked(!isClicked);
     };
   
     const handleBlur = () => {
         setIsClicked(false);
+        onBlur && onBlur();
     };
   
     const defaultStyle: React.CSSProperties = {
