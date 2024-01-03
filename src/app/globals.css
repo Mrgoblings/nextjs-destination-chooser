@@ -64,3 +64,10 @@
   }
 }
 
+
+@media (max-width: 640px) { /* Adjust this value as needed */
+  .hide-on-small {
+    display: none;
+  }
+}
+
