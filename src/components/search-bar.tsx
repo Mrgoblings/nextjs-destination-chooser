@@ -5,10 +5,22 @@ import { useRouter } from 'next/navigation';
 import { CSSTransition } from 'react-transition-group';
 import { FaSearch } from "react-icons/fa";
 
-const SearchBar: React.FC = () => {
+interface SearchBarProps {
+  onFocus?: () => void;
+  onBlur?: () => void;
+}
+
+
+const SearchBar: React.FC<SearchBarProps> = ({ onFocus, onBlur }) => {
     const [isClicked, setIsClicked] = useState(false);
 
     const handleClick = () => {
+        if (!isClicked) {
+            onFocus && onFocus();
+        } else {
+            onBlur && onBlur();
+        }
+        
         setIsClicked(!isClicked);
     };
   
