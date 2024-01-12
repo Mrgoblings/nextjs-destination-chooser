@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, forwardRef } from 'react'
 import { User } from '@prisma/client'
 import { AvatarProps } from '@radix-ui/react-avatar'
 import { Icons } from '@/components/ui/icons'
@@ -9,9 +9,9 @@ interface UserAvatarProps extends AvatarProps {
   user: Pick<User, 'image' | 'name'>
 }
 
-const UserAvatar : FC<UserAvatarProps> = ({ user, ...props }) => {
+const UserAvatar = forwardRef<HTMLDivElement, UserAvatarProps>(({ user, ...props }, ref) => {
   return (
-    <Avatar {...props}>
+    <Avatar {...props} ref={ref}>
       {user.image ? (
         <div className='relative aspect-square h-full w-full'>
           <Image
@@ -30,6 +30,8 @@ const UserAvatar : FC<UserAvatarProps> = ({ user, ...props }) => {
       )}
     </Avatar>
   )
-}
+});
+
+UserAvatar.displayName = 'UserAvatar';
 
 export default UserAvatar;

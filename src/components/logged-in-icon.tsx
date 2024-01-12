@@ -1,4 +1,5 @@
-"use server";
+"use client";
+import { useEffect, useState } from 'react';
 import UserAvatar from "./ui/user-avatar";
 import {
     DropdownMenu,
@@ -8,28 +9,36 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { getAuthSession } from "@/lib/auth";
+import { Session } from "next-auth";
+import { getAuthSession } from '@/lib/auth';
 
-export default async function LoggedInIcon() {
-    const session = await getAuthSession();  
-        return <>
-                {session ? (
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <UserAvatar user={{
-                                name: session.user?.name || "",
-                                image: session.user?.image || "",
-                            }}
-                            />
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent className="w-56">
-                            <DropdownMenuItem>
-                                Log out
-                                <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                    ) : 0
-                }
-        </>;
+
+export default function LoggedInIcon() {
+    const [session, setSession] = useState<Session | null>(null);
+    useEffect(() => {
+        getAuthSession().then(fetchedSession => {
+            setSession(fetchedSession);
+        });
+    }, []);
+
+    return <>
+            {session ? (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <UserAvatar className="mx-3" user={{
+                            name: session?.user?.name || "",
+                            image: session?.user?.image || "",
+                        }}
+                        />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56">
+                        <DropdownMenuItem>
+                            Log out
+                            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+                ) : ""
+            }
+    </>;
 }
