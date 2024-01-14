@@ -1,6 +1,5 @@
 "use client";
-import { useEffect, useState } from 'react';
-import UserAvatar from "./ui/user-avatar";
+import { useSession } from 'next-auth/react';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -8,28 +7,23 @@ import {
     DropdownMenuShortcut,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Session } from "next-auth";
-import { getAuthSession } from '@/lib/auth';
-
+} from "@/components/ui/dropdown-menu";
+import UserAvatar from './ui/user-avatar';
 
 export default function LoggedInIcon() {
-    const [session, setSession] = useState<Session | null>(null);
-    useEffect(() => {
-        getAuthSession().then(fetchedSession => {
-            setSession(fetchedSession);
-        });
-    }, []);
+    const { data: session, status } = useSession();
 
-    return <>
-            {session ? (
+    if (status !== "authenticated") return null;
+
+    return (
+        <>
+            {session && (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <UserAvatar className="mx-3" user={{
-                            name: session?.user?.name || "",
-                            image: session?.user?.image || "",
-                        }}
-                        />
+                            name: session.user?.name || "",
+                            image: session.user?.image || "",
+                        }} />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56">
                         <DropdownMenuItem>
@@ -38,7 +32,7 @@ export default function LoggedInIcon() {
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
-                ) : ""
-            }
-    </>;
+            )}
+        </>
+    );
 }
