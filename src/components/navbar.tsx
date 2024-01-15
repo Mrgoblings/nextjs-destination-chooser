@@ -15,8 +15,9 @@ const Navbar = () =>{
    
       <SearchBar idToHide="logo" />
       <div className='flex flex-row'>
-
-      <LoggedInIcon />
+      
+      {/* TODO: uncomment and fix */}
+      {/* <LoggedInIcon />  */}
 
       <ThemeSwitcher />
       </div>

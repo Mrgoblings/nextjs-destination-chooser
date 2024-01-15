@@ -1,7 +1,7 @@
 version: '3'
 services:
   mysql:
-    image: mysql:5.7
+    image: mysql:latest
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: "passs"
@@ -22,7 +22,7 @@ services:
     environment:
       DATABASE_URL: "mysql://usser:passs@mysql:3306/db_name"
     ports:
-      - 3000:3000
+      - 3001:3000
     networks:
       - app-network
 
