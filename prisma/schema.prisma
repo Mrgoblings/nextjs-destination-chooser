@@ -5,7 +5,7 @@ datasource db {
   provider     = "mysql"
   url          = env("DATABASE_URL")
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
-  relationMode = "foreignKeys"
+  relationMode = "prisma"
 }
 
 generator client {
@@ -25,7 +25,8 @@ model Account {
   scope             String?
   id_token          String? @db.Text
   session_state     String?
-  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade, map: "user_id")
+  @@index([userId], name: "idx_user_id")
 
   @@unique([provider, providerAccountId])
 }
@@ -36,6 +37,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model User {
@@ -61,6 +64,10 @@ model Trip {
   transports    Transport[]
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
+
+  @@index([userId])
+  @@index([departureId])
+  @@index([destinationId])
 }
 
 model Location {
@@ -81,4 +88,6 @@ model Transport {
   departureTime DateTime
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+
+  @@index([tripId])
 }

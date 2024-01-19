@@ -24,54 +24,54 @@ export const authOptions: NextAuthOptions = {
         clientSecret: process?.env.GITHUB_SECRET!,
       }),
     ],
-    // callbacks: {
-    //   async session({ token, session }) {
-    //     if (token) {
-    //       session.user = {
-    //         id: token.id || '',
-    //         name: token.name,
-    //         email: token.email,
-    //         image: token.picture,
-    //       } as User;
-    //     }
+    callbacks: {
+      async session({ token, session }) {
+        if (token) {
+          session.user = {
+            id: token.id || '',
+            name: token.name,
+            email: token.email,
+            image: token.picture,
+          } as User;
+        }
   
-    //     return session
-    //   },
+        return session
+      },
   
-    //   async jwt({ token, user }) {
-    //     const dbUser = await db.user.findFirst({
-    //       where: {
-    //         email: token.email || '',
-    //       },
-    //     })
+      async jwt({ token, user }) {
+        const dbUser = await db.user.findFirst({
+          where: {
+            email: token.email || '',
+          },
+        })
       
-    //     if (user && !dbUser) {
-    //       token.id = user.id || ''
-    //       return token
-    //     }
+        if (user && !dbUser) {
+          token.id = user.id || ''
+          return token
+        }
       
-    //     if (dbUser && !dbUser.name) {
-    //       await db.user.update({
-    //         where: {
-    //           id: dbUser.id,
-    //         },
-    //         data: {
-    //           name: "Sukuna",
-    //         },
-    //       })
-    //     }
+        if (dbUser && !dbUser.name) {
+          await db.user.update({
+            where: {
+              id: dbUser.id,
+            },
+            data: {
+              name: "Sukuna",
+            },
+          })
+        }
       
-    //     return dbUser ? {
-    //       id: dbUser.id,
-    //       name: dbUser.name,
-    //       email: dbUser.email,
-    //       picture: dbUser.image,
-    //     } : token
-    //   },
-    //   redirect() {
-    //     return '/'
-    //   },
-    // },
+        return dbUser ? {
+          id: dbUser.id,
+          name: dbUser.name,
+          email: dbUser.email,
+          picture: dbUser.image,
+        } : token
+      },
+      redirect() {
+        return '/'
+      },
+    },
   }
 
   export const getAuthSession = () => getServerSession(authOptions)
