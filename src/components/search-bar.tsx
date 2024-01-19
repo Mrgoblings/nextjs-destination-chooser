@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, FormEvent } from 'react';
+import React, { useState, useEffect, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { CSSTransition } from 'react-transition-group';
 import { FaSearch } from "react-icons/fa";
@@ -8,11 +8,21 @@ import { FaSearch } from "react-icons/fa";
 interface SearchBarProps {
   onFocus?: () => void;
   onBlur?: () => void;
+  idToHide?: string;
 }
 
 
-const SearchBar: React.FC<SearchBarProps> = ({ onFocus, onBlur }) => {
-    const [isClicked, setIsClicked] = useState(false);
+const SearchBar: React.FC<SearchBarProps> = ({ onFocus, onBlur, idToHide }) => {
+  const router = useRouter();
+  const [isClicked, setIsClicked] = useState(false);
+
+  useEffect(() => {
+    if (isClicked) {
+      router.push(`#${idToHide}`);
+    } else {
+      router.push('#');
+    }
+  }, [isClicked]);
 
     const handleClick = () => {
         if (!isClicked) {
@@ -46,7 +56,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ onFocus, onBlur }) => {
 
     };
 
-    const router = useRouter();
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();

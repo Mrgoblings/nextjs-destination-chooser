@@ -14,10 +14,10 @@ RUN npm install
 COPY . .
 
 # Build the application 
-RUN npm run build
+# RUN npm run build
 
 # Expose the port on which the application will run
 EXPOSE 3000
 
 # Start the application
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]

@@ -1,32 +1,34 @@
 version: '3'
 services:
-  postgres:
-    image: postgres
+  mysql:
+    image: mysql:latest
     restart: always
     environment:
-      POSTGRES_USER: your_postgres_username
-      POSTGRES_PASSWORD: your_postgres_password
-      POSTGRES_DB: your_postgres_database_name
+      MYSQL_ROOT_PASSWORD: "passs"
+      MYSQL_DATABASE: "db_name"
+      MYSQL_USER: "usser"
+      MYSQL_PASSWORD: "passs"
     ports:
-      - 5432:5432
+      - 3306:3306
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - mysql-data:/var/lib/mysql
     networks:
       - app-network
 
   nextjs-destination-chooser:
     build: .
     depends_on:
-      - postgres
+      - mysql
     environment:
-      DATABASE_URL: postgres://your_postgres_username:your_postgres_password@postgres:5432/your_postgres_database_name
+      DATABASE_URL: "mysql://usser:passs@mysql:3306/db_name"
+      SHADOW_DATABASE_URL: "mysql://usser:passs@mysql:3306/db_name"
     ports:
-      - 3000:3000
+      - 3001:3000
     networks:
       - app-network
 
 volumes:
-  postgres-data:
+  mysql-data:
 
 networks:
   app-network:
