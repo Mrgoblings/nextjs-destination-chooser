@@ -21,6 +21,7 @@ services:
       - mysql
     environment:
       DATABASE_URL: "mysql://usser:passs@mysql:3306/db_name"
+      SHADOW_DATABASE_URL: "mysql://usser:passs@mysql:3306/db_name"
     ports:
       - 3001:3000
     networks:
