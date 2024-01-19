@@ -1,5 +1,3 @@
-"use client";
-import { useSession } from 'next-auth/react';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -9,11 +7,14 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import UserAvatar from './ui/user-avatar';
+import { getAuthSession } from "@/lib/auth";
+import Link from "next/link";
+import { LogOut } from "lucide-react";
 
-export default function LoggedInIcon() {
-    const { data: session, status } = useSession();
+export default async function LoggedInIcon() {
+    const session = await getAuthSession();
 
-    if (status !== "authenticated") return null;
+    // if (status !== "authenticated") return null;
 
     return (
         <>
@@ -26,10 +27,12 @@ export default function LoggedInIcon() {
                         }} />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56">
+                    <Link href="/api/auth/signout">
                         <DropdownMenuItem>
-                            Log out
-                            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                            <LogOut className="w-4 h-4 mr-3" />
+                            <span>Log out</span>
                         </DropdownMenuItem>
+                        </Link>
                     </DropdownMenuContent>
                 </DropdownMenu>
             )}

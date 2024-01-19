@@ -17,7 +17,7 @@ const Navbar = () =>{
       <div className='flex flex-row'>
       
       {/* TODO: uncomment and fix */}
-      {/* <LoggedInIcon />  */}
+      <LoggedInIcon /> 
 
       <ThemeSwitcher />
       </div>
