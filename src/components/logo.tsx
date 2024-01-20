@@ -12,15 +12,16 @@ interface LogoProps {
 
 
 const Logo: React.FC<LogoProps> = ({id}) => {
-    const currentTheme = useTheme().theme ?? useTheme().resolvedTheme; 
+    const { theme, resolvedTheme } = useTheme();
+    const currentTheme = theme ?? resolvedTheme; 
     return (
-        <a href="/">
+        <Link href="/">
             {currentTheme === 'dark' ? (
                 <Image src={logoLight} alt="Nomad Networks" width={130} id={id} priority className="mx-5" />
             ) : (
                 <Image src={logoDark} alt="Nomad Networks" width={130} id={id} priority className="mx-5" />
             )}
-        </a>
+        </Link>
     );
 };
 
