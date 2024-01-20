@@ -28,21 +28,15 @@
     "lucide-react": "^0.303.0",
     "next": "^14.1.0",
     "next-auth": "^4.24.5",
-<<<<<<< HEAD
     "next-swagger-doc": "^0.4.0",
-=======
     "next-mdx-remote": "^4.4.1",
->>>>>>> baa307a0de946b76f1bce457f8ca2284e36a9ce8
     "next-themes": "^0.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.12.0",
     "react-transition-group": "^4.4.5",
-<<<<<<< HEAD
     "swagger-ui-react": "^5.11.0",
-=======
     "remark-gfm": "^4.0.0",
->>>>>>> baa307a0de946b76f1bce457f8ca2284e36a9ce8
     "tailwind-merge": "^2.2.0",
     "tailwindcss-animate": "^1.0.7"
   },
