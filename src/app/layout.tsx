@@ -29,7 +29,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#ffffff"></meta>
       </head>
       
-      <body className={`${inter.className} bg-foreground`}>
+      <body className={`${inter.className} bg-background`}>
       <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -38,7 +38,7 @@ export default function RootLayout({
           >
             <Navbar />
 
-            <div style={{ paddingTop: '7rem' }} className="bg-muted"> 
+            <div style={{ paddingTop: '7.70rem' }} > 
               {children}
             </div>
         </ThemeProvider>
