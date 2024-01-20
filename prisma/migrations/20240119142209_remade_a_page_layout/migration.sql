@@ -44,40 +44,46 @@ CREATE TABLE `User` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Trip` (
+CREATE TABLE `Page` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `userId` VARCHAR(191) NOT NULL,
-    `departureId` INTEGER NOT NULL,
-    `destinationId` INTEGER NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updatedAt` DATETIME(3) NOT NULL,
+    `path` VARCHAR(191) NOT NULL,
 
-    INDEX `Trip_userId_idx`(`userId`),
-    INDEX `Trip_departureId_idx`(`departureId`),
-    INDEX `Trip_destinationId_idx`(`destinationId`),
+    UNIQUE INDEX `Page_path_key`(`path`),
+    INDEX `Page_userId_idx`(`userId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Location` (
+CREATE TABLE `Title` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(191) NOT NULL,
-    `latitude` DOUBLE NOT NULL,
-    `longitude` DOUBLE NOT NULL,
+    `content` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `pageId` INTEGER NOT NULL,
 
+    INDEX `Title_pageId_idx`(`pageId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Transport` (
+CREATE TABLE `Heading` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `tripId` INTEGER NOT NULL,
-    `type` VARCHAR(191) NOT NULL,
-    `price` DOUBLE NOT NULL,
-    `departureTime` DATETIME(3) NOT NULL,
+    `content` VARCHAR(191) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updatedAt` DATETIME(3) NOT NULL,
+    `pageId` INTEGER NOT NULL,
 
-    INDEX `Transport_tripId_idx`(`tripId`),
+    INDEX `Heading_pageId_idx`(`pageId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `BodyContent` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `content` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `headingId` INTEGER NOT NULL,
+
+    INDEX `BodyContent_headingId_idx`(`headingId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

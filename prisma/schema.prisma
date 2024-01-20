@@ -50,44 +50,49 @@ model User {
   role          Int       @default(0)
   Account       Account[]
   Session       Session[]
-  Trips         Trip[]
+  Page          Page[]
 }
 
-model Trip {
+model Page {
   id            Int         @id @default(autoincrement())
   userId        String
-  user          User        @relation(fields: [userId], references: [id])
-  departure     Location    @relation("DepartureLocation", fields: [departureId], references: [id])
-  departureId   Int
-  destination   Location    @relation("DestinationLocation", fields: [destinationId], references: [id])
-  destinationId Int
-  transports    Transport[]
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  path          String      @unique
+
+  Title         Title[]
+  Heading      Heading[]
 
   @@index([userId])
-  @@index([departureId])
-  @@index([destinationId])
 }
 
-model Location {
+model Title {
   id         Int    @id @default(autoincrement())
-  name       String
-  latitude   Float
-  longitude  Float
-  departures Trip[] @relation("DepartureLocation")
-  arrivals   Trip[] @relation("DestinationLocation")
+  content    String
+  createdAt  DateTime    @default(now())
+  pageId     Int
+  page     Page        @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  @@index([pageId])
 }
 
-model Transport {
-  id            Int      @id @default(autoincrement())
-  tripId        Int
-  trip          Trip     @relation(fields: [tripId], references: [id])
-  type          String
-  price         Float
-  departureTime DateTime
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+model Heading {
+  id         Int    @id @default(autoincrement())
+  content    String
+  createdAt  DateTime    @default(now())
+  pageId     Int
+  page     Page        @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  BodyContent   BodyContent[]
 
-  @@index([tripId])
+  @@index([pageId])
+}
+
+model BodyContent {
+  id         Int    @id @default(autoincrement())
+  content    String
+  createdAt  DateTime    @default(now())
+  headingId     Int
+  heading     Heading        @relation(fields: [headingId], references: [id], onDelete: Cascade)
+
+  @@index([headingId])
 }
