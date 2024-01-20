@@ -65,13 +65,15 @@
 }
 
 
-@media (max-width: 640px) { /* Adjust this value as needed */
+@media (max-width: 620px) { 
   #logo {
     display: block;
+    @apply select-none;
   }
 
   #logo:target {
     display: none;
+    width: 0;
   }
 }
 
