@@ -9,11 +9,11 @@ export default function Home() {
       
       <div className="my-5 flex flex-row min-w-fit">
       
-        <Link href="/about" className="px-4 py-2 rounded bg-primary text-background hover:bg-primary-dark transition-colors">
+        <Link href="/about" className="px-4 py-2 mx-3 rounded bg-primary text-background hover:bg-primary-dark transition-colors">
           Learn more
         </Link>
         
-        <Link href="/api/auth/signin" className="px-4 py-2 rounded bg-primary text-background hover:bg-primary-dark transition-colors">
+        <Link href="/api/auth/signin" className="px-4 py-2 mx-3 rounded bg-primary text-background hover:bg-primary-dark transition-colors">
           Sign in
         </Link>
       </div>

@@ -14,8 +14,6 @@ import { LogOut } from "lucide-react";
 export default async function LoggedInIcon() {
     const session = await getAuthSession();
 
-    // if (status !== "authenticated") return null;
-
     return (
         <>
             {session && (
