@@ -1,8 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import {db} from "@/lib/db";
+import { db } from "@/lib/db";
 import { getSession } from '../../../actions';
 
 /**
+ * 
  * @swagger
  * /api/page/{id}:
  *   patch:
@@ -14,11 +15,22 @@ import { getSession } from '../../../actions';
  *         description: ID of the page
  *         schema:
  *           type: string
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/PageData'
  *     responses:
  *       200:
  *         description: Page information updated successfully
  *       404:
  *         description: Page not found
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal Server Error
+ *       405:
+ *         description: Method Not Allowed
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const {
@@ -36,11 +48,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         try {
             const updatedPage = await db.page.update({
                 where: {
-                    id: id as string,
+                    id: +(id as string),
                 },
                 data: {
                     // Update page information logic here
                     // ...
+                    ...pageData,
                 },
             });
 
@@ -54,7 +67,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         try {
             const page = await db.page.findUnique({
                 where: {
-                    id: id as string,
+                    id: +(id as string),
                 },
             });
 
@@ -72,7 +85,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         try {
             const deletedPage = await db.page.delete({
                 where: {
-                    id: id as string,
+                    id: +(id as string),
                 },
             });
 
