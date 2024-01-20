@@ -4,31 +4,41 @@ import Heading  from '@/components/site-builder/heading';
 import BodyContent from '@/components/site-builder/body-content';
 import HeadingBodyBlock from '@/components/site-builder/heading-body-block';
 import Subheading from '@/components/site-builder/subheading';
+import { throws } from 'assert';
+
 
 const TheGiantCauseway: React.FC = () => {
     return (
         <div className='mx-5p flex justify-center flex-col bg-muted border-8 border-foreground'>
             <Title subtitle={`
+                <br></br>
+                ![The Giant's Causeway img](https://www.thegiantscausewaytour.com/wp-content/uploads/2019/01/The-Giants-Causeway-Story-M.jpg)
+                <br></br>
+                <br></br>
                 Embark on a mesmerizing Irish adventure with our exclusive group travel offer from Sofia to Bushmills. Discover the enchanting Giant's Causeway and experience the warm hospitality of Ireland's stunning landscapes.
                 <br></br>
                 **Destination**: Bushmills, Ireland<br></br>
                 **Group Size**: Minimum 15 people<br></br>
                 **Suitability**: Children, adults, and individuals with disabilities<br></br>
                 **Special Equipment**: Not required
+                <br></br>
             `}>
                 Welcome to the Giant Causeway!
             </Title>
-            
             <HeadingBodyBlock
-                heading="1. Geolocation and Uniqueness"
-                body="The Giant's Causeway lies at the foot of the basalt cliffs along the sea coast on the edge of the Antrim plateau in Northern Ireland. It’s renowned for its unique geological formations. The most characteristic feature of this incredible UNESCO World Heritage site is the exposure of around 40,000 massive black hexagonal basalt columns, descending gently into the sea. Geological studies of these formations over the last 300 years show that this striking landscape was formed by volcanic activity during the Tertiary, around 50-60 million years ago."
+                heading = {`
+                    What is the Giant's Causeway?
+                    ![The Giant's Causeway img](https://apetcher.files.wordpress.com/2015/06/img_1141.jpg?w=200)
+                `}
+                body="The Giant's Causeway lies at the foot of the basalt cliffs along the sea coast on the edge of the Antrim plateau in Northern Ireland. It's renowned for its unique geological formations. The most characteristic feature of this incredible UNESCO World Heritage site is the exposure of around 40,000 massive black hexagonal basalt columns, descending gently into the sea. Geological studies of these formations over the last 300 years show that this striking landscape was formed by volcanic activity during the Tertiary, around 50-60 million years ago."
             />
 
             <HeadingBodyBlock
-                heading="2. How it was formed"
+                heading="How it was formed"
                 subheading='Geological history of the place'
                 body={`
                     Geological studies of these formations over the last 300 years show that this striking landscape was formed by volcanic activity around 60 million years ago.
+                    <br></br>
                     <br></br>
                     Half a million years of volcanic activity deposits several lava flows (the Lower Basalts). Volcanism ceases for half a million years. This period of volcanic inactivity and weathering is followed by a new phase of volcanism. Molten rock rises to fill a magma chamber beneath the surface. Magma ascends to the surface and erupts as lava. The magma chamber deflates causing the ground above to subside and creating a hollow at the surface. The erupted lava then fills the hollow.
                 `}
@@ -36,7 +46,7 @@ const TheGiantCauseway: React.FC = () => {
 
             
             <HeadingBodyBlock
-                heading="3. Legends of the Giant's Causeway"
+                heading="Legends of the Giant's Causeway"
                 subheading='The legend for the two giants'
                 body={`
                     Legend has it that an Irish giant named Finn McCool created a causeway to get across the Irish Sea to face his rival, the Scottish giant Benandonner, who challenged Finn. Following their fearsome meeting, Benandonner ripped up the causeway as he fled back to Scotland, leaving what you see here today. 
@@ -48,7 +58,7 @@ const TheGiantCauseway: React.FC = () => {
 
 
             <HeadingBodyBlock
-                heading="4. Itinerary"
+                heading="Itinerary"
                 body={`
                 1. **Transportation**: By plane, departing from Sofia Airport to Dublin with a transfer in Munich. Total travel time: 5 hours and 55 minutes.
                 <br></br>
@@ -64,14 +74,14 @@ const TheGiantCauseway: React.FC = () => {
 
 
             <HeadingBodyBlock
-                heading="5. Prices per person"
+                heading="Prices per person"
                 body={`
                     - Air tickets: BGN 582 <br></br>
                     - Giant's Causeway attraction: BGN 30.52 <br></br>
                     - Accommodation at "Finn McCools Giants Causeway hostel" for four nights: BGN 210 <br></br>
                     <br></br>
                     <br></br>
-                    **Total price per person**: BGN 822.52
+                    **Total price per person**: BGN **822.52**
                 `}
             />
             
