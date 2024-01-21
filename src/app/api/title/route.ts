@@ -21,7 +21,7 @@ import { db } from "@/lib/db";
  *       500:
  *         description: Internal Server Error
  */
-export async function handler(req: NextRequest) {
+export async function GET(req: NextRequest) {
     const MAX_DEFAULT_LIMIT = 20;
 
     try {

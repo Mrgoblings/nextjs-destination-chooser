@@ -22,7 +22,7 @@ import { db } from "@/lib/db";
  *       404:
  *         description: No Headings found
  */
-export default async function GET(req: NextRequest) {
+export async function GET(req: NextRequest) {
     const MAX_DEFAULT_LIMIT = 20;
 
     try {

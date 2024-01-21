@@ -166,7 +166,7 @@ export async function GET(req: NextRequest) {
  *       401:
  *         description: Unauthorized
  */
-export default async function DELETE(req: NextRequest) {
+export async function DELETE(req: NextRequest) {
     const id = +(req.nextUrl.pathname.split('/').pop() + "");
 
     const session = await getSession();

@@ -23,7 +23,7 @@ import { getSession } from '../../actions';
  *       401:
  *         description: Unauthorized
  */
-export default async function GET(req: NextRequest) {
+export async function GET(req: NextRequest) {
     const MAX_DEFAULT_LIMIT = 20;
 
     try {
