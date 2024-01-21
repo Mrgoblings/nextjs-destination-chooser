@@ -5,26 +5,26 @@ import { getSession } from '../../../actions';
 /**
  * 
  * @swagger
- * /api/page/{id}:
+ * /api/title/{id}:
  *   patch:
- *     summary: Update page information
+ *     summary: Update title information
  *     parameters:
  *       - name: id
  *         in: path
  *         required: true
- *         description: ID of the page
+ *         description: ID of the title
  *         schema:
  *           type: string
  *     requestBody:
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/PageData'
+ *             $ref: '#/components/schemas/TitleData'
  *     responses:
  *       200:
- *         description: Page information updated successfully
+ *         description: Title information updated successfully
  *       404:
- *         description: Page not found
+ *         description: Title not found
  *       401:
  *         description: Unauthorized
  *       500:
@@ -43,21 +43,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     if (req.method === 'PATCH') {
-        const { pageData } = req.body;
+        const { titleData } = req.body;
 
         try {
-            const updatedPage = await db.page.update({
+            const updatedTitle = await db.title.update({
                 where: {
                     id: +(id as string),
                 },
                 data: {
-                    // Update page information logic here
+                    // Update title information logic here
                     // ...
-                    ...pageData,
+                    ...titleData,
                 },
             });
 
-            return res.status(200).json({ message: 'Page information updated successfully' });
+            return res.status(200).json({ message: 'Title information updated successfully' });
         } catch (error) {
             return res.status(500).json({ error: 'Internal Server Error' });
         }
@@ -66,21 +66,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     /**
      * 
      * @swagger
-     * /api/page/{id}:
+     * /api/title/{id}:
      *   get:
-     *     summary: Get page information
+     *     summary: Get title information
      *     parameters:
      *       - name: id
      *         in: path
      *         required: true
-     *         description: ID of the page
+     *         description: ID of the title
      *         schema:
      *           type: string
      *     responses:
      *       200:
-     *         description: Page information retrieved successfully
+     *         description: Title information retrieved successfully
      *       404:
-     *         description: Page not found
+     *         description: Title not found
      *       500:
      *         description: Internal Server Error
      *       401:
@@ -90,17 +90,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
      */
     if (req.method === 'GET') {
         try {
-            const page = await db.page.findUnique({
+            const title = await db.title.findUnique({
                 where: {
                     id: +(id as string),
                 },
             });
 
-            if (!page) {
-                return res.status(404).json({ error: 'Page not found' });
+            if (!title) {
+                return res.status(404).json({ error: 'Title not found' });
             }
 
-            return res.status(200).json({ page });
+            return res.status(200).json({ title });
         } catch (error) {
             return res.status(500).json({ error: 'Internal Server Error' });
         }
@@ -109,21 +109,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     /**
      * 
      * @swagger
-     * /api/page/{id}:
+     * /api/title/{id}:
      *   delete:
-     *     summary: Delete page
+     *     summary: Delete title
      *     parameters:
      *       - name: id
      *         in: path
      *         required: true
-     *         description: ID of the page
+     *         description: ID of the title
      *         schema:
      *           type: string
      *     responses:
      *       200:
-     *         description: Page deleted successfully
+     *         description: Title deleted successfully
      *       404:
-     *         description: Page not found
+     *         description: Title not found
      *       500:
      *         description: Internal Server Error
      *       401:
@@ -133,13 +133,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
      */
     if (req.method === 'DELETE') {
         try {
-            const deletedPage = await db.page.delete({
+            const deletedTitle = await db.title.delete({
                 where: {
                     id: +(id as string),
                 },
             });
 
-            return res.status(200).json({ message: 'Page deleted successfully' });
+            return res.status(200).json({ message: 'Title deleted successfully' });
         } catch (error) {
             return res.status(500).json({ error: 'Internal Server Error' });
         }

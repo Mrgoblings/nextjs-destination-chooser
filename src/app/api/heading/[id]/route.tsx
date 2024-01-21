@@ -5,26 +5,26 @@ import { getSession } from '../../../actions';
 /**
  * 
  * @swagger
- * /api/page/{id}:
+ * /api/heading/{id}:
  *   patch:
- *     summary: Update page information
+ *     summary: Update heading information
  *     parameters:
  *       - name: id
  *         in: path
  *         required: true
- *         description: ID of the page
+ *         description: ID of the heading
  *         schema:
  *           type: string
  *     requestBody:
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/PageData'
+ *             $ref: '#/components/schemas/HeadingData'
  *     responses:
  *       200:
- *         description: Page information updated successfully
+ *         description: Heading information updated successfully
  *       404:
- *         description: Page not found
+ *         description: Heading not found
  *       401:
  *         description: Unauthorized
  *       500:
@@ -43,21 +43,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     if (req.method === 'PATCH') {
-        const { pageData } = req.body;
+        const { headingData } = req.body;
 
         try {
-            const updatedPage = await db.page.update({
+            const updatedHeading = await db.heading.update({
                 where: {
                     id: +(id as string),
                 },
                 data: {
-                    // Update page information logic here
+                    // Update heading information logic here
                     // ...
-                    ...pageData,
+                    ...headingData,
                 },
             });
 
-            return res.status(200).json({ message: 'Page information updated successfully' });
+            return res.status(200).json({ message: 'Heading information updated successfully' });
         } catch (error) {
             return res.status(500).json({ error: 'Internal Server Error' });
         }
@@ -66,21 +66,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     /**
      * 
      * @swagger
-     * /api/page/{id}:
+     * /api/heading/{id}:
      *   get:
-     *     summary: Get page information
+     *     summary: Get heading information
      *     parameters:
      *       - name: id
      *         in: path
      *         required: true
-     *         description: ID of the page
+     *         description: ID of the heading
      *         schema:
      *           type: string
      *     responses:
      *       200:
-     *         description: Page information retrieved successfully
+     *         description: Heading information retrieved successfully
      *       404:
-     *         description: Page not found
+     *         description: Heading not found
      *       500:
      *         description: Internal Server Error
      *       401:
@@ -90,17 +90,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
      */
     if (req.method === 'GET') {
         try {
-            const page = await db.page.findUnique({
+            const heading = await db.heading.findUnique({
                 where: {
                     id: +(id as string),
                 },
             });
 
-            if (!page) {
-                return res.status(404).json({ error: 'Page not found' });
+            if (!heading) {
+                return res.status(404).json({ error: 'Heading not found' });
             }
 
-            return res.status(200).json({ page });
+            return res.status(200).json({ heading });
         } catch (error) {
             return res.status(500).json({ error: 'Internal Server Error' });
         }
@@ -109,21 +109,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     /**
      * 
      * @swagger
-     * /api/page/{id}:
+     * /api/heading/{id}:
      *   delete:
-     *     summary: Delete page
+     *     summary: Delete heading
      *     parameters:
      *       - name: id
      *         in: path
      *         required: true
-     *         description: ID of the page
+     *         description: ID of the heading
      *         schema:
      *           type: string
      *     responses:
      *       200:
-     *         description: Page deleted successfully
+     *         description: Heading deleted successfully
      *       404:
-     *         description: Page not found
+     *         description: Heading not found
      *       500:
      *         description: Internal Server Error
      *       401:
@@ -133,13 +133,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
      */
     if (req.method === 'DELETE') {
         try {
-            const deletedPage = await db.page.delete({
+            const deletedHeading = await db.heading.delete({
                 where: {
                     id: +(id as string),
                 },
             });
 
-            return res.status(200).json({ message: 'Page deleted successfully' });
+            return res.status(200).json({ message: 'Heading deleted successfully' });
         } catch (error) {
             return res.status(500).json({ error: 'Internal Server Error' });
         }

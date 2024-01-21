@@ -5,19 +5,19 @@ import { getSession } from '../../actions';
 /**
  * 
  * @swagger
- * /api/page:
+ * /api/heading:
  *   get:
- *     summary: Get all pages
+ *     summary: Get all headings
  *     parameters:
  *       - name: limit
  *         in: query
  *         required: false
- *         description: Limit the number of pages to retrieve
+ *         description: Limit the number of headings to retrieve
  *         schema:
  *           type: integer
  *     responses:
  *       200:
- *         description: Pages retrieved successfully
+ *         description: Headings retrieved successfully
  *       500:
  *         description: Internal Server Error
  *       401:
@@ -34,11 +34,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (req.method === 'GET') {
         try {
             const { limit } = req.query;
-            const pages = await db.page.findMany({
+            const headings = await db.heading.findMany({
                 take: limit ? +(limit as string) : undefined,
             });
 
-            return res.status(200).json({ pages });
+            return res.status(200).json({ headings });
         } catch (error) {
             return res.status(500).json({ error: 'Internal Server Error' });
         }
