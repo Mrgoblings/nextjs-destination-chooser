@@ -50,7 +50,11 @@ model User {
   role          Int       @default(0)
   Account       Account[]
   Session       Session[]
+
   Page          Page[]
+  Title         Title[]
+  Heading       Heading[]
+  BodyContent   BodyContent[]
 }
 
 model Page {
@@ -72,8 +76,11 @@ model Title {
   createdAt  DateTime    @default(now())
   pageId     Int
   page     Page        @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  userId        String
+  user     User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([pageId])
+  @@index([userId])
 }
 
 model Heading {
@@ -83,8 +90,12 @@ model Heading {
   pageId     Int
   page     Page        @relation(fields: [pageId], references: [id], onDelete: Cascade)
   BodyContent   BodyContent[]
+  userId        String
+  user     User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  position   Int
 
   @@index([pageId])
+  @@index([userId])
 }
 
 model BodyContent {
@@ -93,6 +104,10 @@ model BodyContent {
   createdAt  DateTime    @default(now())
   headingId     Int
   heading     Heading        @relation(fields: [headingId], references: [id], onDelete: Cascade)
+  userId        String
+  user     User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
 
   @@index([headingId])
+  @@index([userId])
 }

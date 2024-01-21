@@ -95,11 +95,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     id: +(id as string),
                 },
                 include: {
-                    Title: true,
-                    Heading: {
-                        include: {
-                            BodyContent: true,
+                    Title: {
+                        orderBy: {
+                            createdAt: 'desc'
                         },
+                        take: 1
+                    },
+                    Heading: {
+                        orderBy: {
+                            position: 'asc',
+                            createdAt: 'desc'
+                        },
+                        distinct: ['position'],
+                        include: {
+                            BodyContent: {
+                                orderBy: {
+                                    createdAt: 'desc'
+                                },
+                                take: 1
+                            }
+                        }
                     },
                 },
             });
@@ -108,7 +123,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 return res.status(404).json({ error: 'Page not found' });
             }
 
-            return res.status(200).json({ page });
+            interface HeadingPosition {
+                [key: number]: any;
+            }
+
+            const latestHeadings = Object.values(
+                page.Heading.reduce((acc: HeadingPosition, heading) => {
+                    if (!acc[heading.position] || new Date(heading.createdAt) > new Date(acc[heading.position].createdAt)) {
+                        acc[heading.position] = heading;
+                    }
+                    return acc;
+                }, {})
+            );
+
+            const newPage = {
+                ...page,
+                Heading: latestHeadings,
+            };
+
+            return res.status(200).json({ page: newPage });
         } catch (error) {
             return res.status(500).json({ error: 'Internal Server Error' });
         }

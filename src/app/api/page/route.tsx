@@ -38,16 +38,53 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const pages = await db.page.findMany({
                 take: limit ? +(limit as string) : MAX_DEFAULT_LIMIT,
                 include: {
-                    Title: true,
-                    Heading: {
-                        include: {
-                            BodyContent: true,
+                    Title: {
+                        orderBy: {
+                            createdAt: 'desc'
                         },
+                        take: 1
+                    },
+                    Heading: {
+                        orderBy: {
+                            position: 'asc',
+                            createdAt: 'desc'
+                        },
+                        distinct: ['position'],
+                        include: {
+                            BodyContent: {
+                                orderBy: {
+                                    createdAt: 'desc'
+                                },
+                                take: 1
+                            }
+                        }
                     },
                 },
             });
 
-            return res.status(200).json({ pages });
+            const newPages = pages.map((page) => {
+                interface HeadingPosition {
+                    [key: number]: any;
+                }
+
+                const latestHeadings = Object.values(
+                    page.Heading.reduce((acc: HeadingPosition, heading) => {
+                        if (!acc[heading.position] || new Date(heading.createdAt) > new Date(acc[heading.position].createdAt)) {
+                            acc[heading.position] = heading;
+                        }
+                        return acc;
+                    }, {})
+                );
+
+                const newPage = {
+                    ...page,
+                    Heading: latestHeadings,
+                };
+
+                return newPage;
+            });
+
+            return res.status(200).json({ pages: newPages });
         } catch (error) {
             return res.status(500).json({ error: 'Internal Server Error' });
         }
