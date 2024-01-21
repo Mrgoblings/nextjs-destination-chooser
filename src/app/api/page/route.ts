@@ -1,6 +1,5 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 import { db } from "@/lib/db";
-import { getSession } from '../../actions';
 
 /**
  * 
@@ -23,73 +22,67 @@ import { getSession } from '../../actions';
  *         description: Internal Server Error
  *       401:
  *         description: Unauthorized
- *       405:
- *         description: Method Not Allowed
  */
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function GET(req: NextRequest) {
     const MAX_DEFAULT_LIMIT = 20;
-    const session = await getSession();
-    if (!session) {
-        return res.status(401).json({ error: 'Unauthorized' });
-    }
 
-    if (req.method === 'GET') {
-        try {
-            const { limit } = req.query;
-            const pages = await db.page.findMany({
-                take: limit ? +(limit as string) : MAX_DEFAULT_LIMIT,
-                include: {
-                    Title: {
-                        orderBy: {
-                            createdAt: 'desc'
-                        },
-                        take: 1
+    try {
+        const { limit } = await req.json();
+        const pages = await db.page.findMany({
+            take: limit ? +(limit as string) : MAX_DEFAULT_LIMIT,
+            include: {
+                Title: {
+                    orderBy: {
+                        createdAt: 'desc'
                     },
-                    Heading: {
-                        orderBy: {
-                            position: 'asc',
-                            createdAt: 'desc'
-                        },
-                        distinct: ['position'],
-                        include: {
-                            BodyContent: {
-                                orderBy: {
-                                    createdAt: 'desc'
-                                },
-                                take: 1
-                            }
-                        }
-                    },
+                    take: 1
                 },
-            });
-
-            const newPages = pages.map((page: { Heading: any[]; }) => {
-                interface HeadingPosition {
-                    [key: number]: any;
-                }
-
-                const latestHeadings = Object.values(
-                    page.Heading.reduce((acc: HeadingPosition, heading: { position: number; createdAt: string | number | Date; }) => {
-                        if (!acc[heading.position] || new Date(heading.createdAt) > new Date(acc[heading.position].createdAt)) {
-                            acc[heading.position] = heading;
+                Heading: {
+                    orderBy: {
+                        position: 'asc',
+                        createdAt: 'desc'
+                    },
+                    distinct: ['position'],
+                    include: {
+                        BodyContent: {
+                            orderBy: {
+                                createdAt: 'desc'
+                            },
+                            take: 1
                         }
-                        return acc;
-                    }, {})
-                );
+                    }
+                },
+            },
+        });
 
-                const newPage = {
-                    ...page,
-                    Heading: latestHeadings,
-                };
+        const newPages = pages.map((page: { Heading: any[]; }) => {
+            interface HeadingPosition {
+                [key: number]: any;
+            }
 
-                return newPage;
-            });
+            const latestHeadings = Object.values(
+                page.Heading.reduce((acc: HeadingPosition, heading: { position: number; createdAt: string | number | Date; }) => {
+                    if (!acc[heading.position] || new Date(heading.createdAt) > new Date(acc[heading.position].createdAt)) {
+                        acc[heading.position] = heading;
+                    }
+                    return acc;
+                }, {})
+            );
 
-            return res.status(200).json({ pages: newPages });
-        } catch (error) {
-            return res.status(500).json({ error: 'Internal Server Error' });
+            const newPage = {
+                ...page,
+                Heading: latestHeadings,
+            };
+
+            return newPage;
+        });
+
+        if (newPages.length === 0) {
+            return NextResponse.json({ error: 'No Headings found' }, { status: 404 });
         }
-    }
 
-    return res.status(405).json({ error: 'Method Not Allowed' });
+        return NextResponse.json({ pages: newPages }, { status: 200 });
+    } catch (error) {
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    }
 }

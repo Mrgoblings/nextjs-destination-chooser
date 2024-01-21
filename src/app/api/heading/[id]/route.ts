@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 import { db } from "@/lib/db";
 import { getSession } from '../../../actions';
 
@@ -29,121 +29,120 @@ import { getSession } from '../../../actions';
  *         description: Unauthorized
  *       500:
  *         description: Internal Server Error
- *       405:
- *         description: Method Not Allowed
  */
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const {
-        query: { id },
-    } = req;
+export async function PATCH(req: NextRequest) {
+    const id = +(req.nextUrl.pathname.split('/').pop() + "");
+
 
     const session = await getSession();
     if (!session) {
-        return res.status(401).json({ error: 'Unauthorized' });
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    if (req.method === 'PATCH') {
-        const { headingData } = req.body;
+    const { headingData } = await req.json();
 
-        try {
-            const updatedHeading = await db.heading.update({
-                where: {
-                    id: +(id as string),
-                },
-                data: {
-                    // Update heading information logic here
-                    // ...
-                    ...headingData,
-                },
-            });
+    try {
+        const updatedHeading = await db.heading.update({
+            where: {
+                id: id,
+            },
+            data: {
+                // Update heading information logic here
+                // ...
+                ...headingData,
+            },
+        });
 
-            return res.status(200).json({ message: 'Heading information updated successfully' });
-        } catch (error) {
-            return res.status(500).json({ error: 'Internal Server Error' });
+        return NextResponse.json({ message: 'Heading information updated successfully' }, { status: 200 });
+    } catch (error) {
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    }
+}
+
+
+
+/**
+ * 
+ * @swagger
+ * /api/heading/{id}:
+ *   get:
+ *     summary: Get heading information
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: ID of the heading
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Heading information retrieved successfully
+ *       404:
+ *         description: No Headings found
+ *       500:
+ *         description: Internal Server Error
+ */
+export async function GET(req: NextRequest) {
+    const id = +(req.nextUrl.pathname.split('/').pop() + "");
+
+    try {
+        const heading = await db.heading.findUnique({
+            where: {
+                id,
+            },
+        });
+
+        if (!heading) {
+            return NextResponse.json({ error: 'No Headings found' }, { status: 404 });
         }
+
+        return NextResponse.json({ heading }, { status: 200 });
+    } catch (error) {
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    }
+}
+
+
+/**
+ * 
+ * @swagger
+ * /api/heading/{id}:
+ *   delete:
+ *     summary: Delete heading
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: ID of the heading
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Heading deleted successfully
+ *       404:
+ *         description: Heading not found
+ *       500:
+ *         description: Internal Server Error
+ *       401:
+ *         description: Unauthorized
+ */
+export async function DELETE(req: NextRequest) {
+    const id = +(req.nextUrl.pathname.split('/').pop() + "");
+    
+    const session = await getSession();
+    if (!session) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    /**
-     * 
-     * @swagger
-     * /api/heading/{id}:
-     *   get:
-     *     summary: Get heading information
-     *     parameters:
-     *       - name: id
-     *         in: path
-     *         required: true
-     *         description: ID of the heading
-     *         schema:
-     *           type: string
-     *     responses:
-     *       200:
-     *         description: Heading information retrieved successfully
-     *       404:
-     *         description: Heading not found
-     *       500:
-     *         description: Internal Server Error
-     *       401:
-     *         description: Unauthorized
-     *       405:
-     *         description: Method Not Allowed
-     */
-    if (req.method === 'GET') {
-        try {
-            const heading = await db.heading.findUnique({
-                where: {
-                    id: +(id as string),
-                },
-            });
+    try {
+        const deletedHeading = await db.heading.delete({
+            where: {
+                id: id,
+            },
+        });
 
-            if (!heading) {
-                return res.status(404).json({ error: 'Heading not found' });
-            }
-
-            return res.status(200).json({ heading });
-        } catch (error) {
-            return res.status(500).json({ error: 'Internal Server Error' });
-        }
+        return NextResponse.json({ message: 'Heading deleted successfully' }, { status: 200 });
+    } catch (error) {
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
-
-    /**
-     * 
-     * @swagger
-     * /api/heading/{id}:
-     *   delete:
-     *     summary: Delete heading
-     *     parameters:
-     *       - name: id
-     *         in: path
-     *         required: true
-     *         description: ID of the heading
-     *         schema:
-     *           type: string
-     *     responses:
-     *       200:
-     *         description: Heading deleted successfully
-     *       404:
-     *         description: Heading not found
-     *       500:
-     *         description: Internal Server Error
-     *       401:
-     *         description: Unauthorized
-     *       405:
-     *         description: Method Not Allowed
-     */
-    if (req.method === 'DELETE') {
-        try {
-            const deletedHeading = await db.heading.delete({
-                where: {
-                    id: +(id as string),
-                },
-            });
-
-            return res.status(200).json({ message: 'Heading deleted successfully' });
-        } catch (error) {
-            return res.status(500).json({ error: 'Internal Server Error' });
-        }
-    }
-
-    return res.status(405).json({ error: 'Method Not Allowed' });
 }

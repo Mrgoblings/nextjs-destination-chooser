@@ -1,6 +1,50 @@
-import { NextApiRequest, NextApiResponse } from 'next';
 import { db } from "@/lib/db";
 import { getSession } from '../../../actions';
+import { NextRequest, NextResponse } from "next/server";
+
+/**
+ * 
+ * @swagger
+ * /api/body-content/{id}:
+ *   get:
+ *     summary: Get body content information
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: ID of the body content
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Body content information retrieved successfully
+ *       404:
+ *         description: Body content not found
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal Server Error
+ */
+export async function GET(req: NextRequest) {
+    const id = +(req.nextUrl.pathname.split('/').pop() + "");
+
+    try {
+        const bodyContent = await db.bodyContent.findUnique({
+            where: {
+                id: id,
+            },
+        });
+
+        if (!bodyContent) {
+            return NextResponse.json({ error: 'BodyContent not found' }, { status: 404 });
+        }
+
+        return NextResponse.json({ bodyContent }, { status: 200 });
+    } catch (error) {
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    }
+}
+
 
 /**
  * 
@@ -16,6 +60,7 @@ import { getSession } from '../../../actions';
  *         schema:
  *           type: string
  *     requestBody:
+ *       required: true
  *       content:
  *         application/json:
  *           schema:
@@ -23,127 +68,73 @@ import { getSession } from '../../../actions';
  *     responses:
  *       200:
  *         description: Body content information updated successfully
- *       404:
- *         description: Body content not found
- *       401:
- *         description: Unauthorized
  *       500:
  *         description: Internal Server Error
- *       405:
- *         description: Method Not Allowed
  */
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const {
-        query: { id },
-    } = req;
+export async function PATCH(req: NextRequest) {
+    const id = +(req.nextUrl.pathname.split('/').pop() + "");
 
     const session = await getSession();
     if (!session) {
-        return res.status(401).json({ error: 'Unauthorized' });
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    if (req.method === 'PATCH') {
-        const { bodyContentData } = req.body;
+    const { bodyContentData } = await req.json();
 
-        try {
-            const updatedBodyContent = await db.bodyContent.update({
-                where: {
-                    id: +(id as string),
-                },
-                data: {
-                    // Update body content information logic here
-                    // ...
-                    ...bodyContentData,
-                },
-            });
+    try {
+        const updatedBodyContent = await db.bodyContent.update({
+            where: {
+                id: id,
+            },
+            data: {
+                // Update body content information logic here
+                // ...
+                ...bodyContentData,
+            },
+        });
 
-            return res.status(200).json({ message: 'BodyContent information updated successfully' });
-        } catch (error) {
-            return res.status(500).json({ error: 'Internal Server Error' });
-        }
+        return NextResponse.json({ message: 'BodyContent information updated successfully' }, { status: 200 });
+    } catch (error) {
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
+}
 
-    /**
-     * 
-     * @swagger
-     * /api/body-content/{id}:
-     *   get:
-     *     summary: Get body content information
-     *     parameters:
-     *       - name: id
-     *         in: path
-     *         required: true
-     *         description: ID of the body content
-     *         schema:
-     *           type: string
-     *     responses:
-     *       200:
-     *         description: Body content information retrieved successfully
-     *       404:
-     *         description: Body content not found
-     *       500:
-     *         description: Internal Server Error
-     *       401:
-     *         description: Unauthorized
-     *       405:
-     *         description: Method Not Allowed
-     */
-    if (req.method === 'GET') {
-        try {
-            const bodyContent = await db.bodyContent.findUnique({
-                where: {
-                    id: +(id as string),
-                },
-            });
+/**
+ * 
+ * @swagger
+ * /api/body-content/{id}:
+ *   delete:
+ *     summary: Delete body content
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: ID of the body content
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Body content deleted successfully
+ *       500:
+ *         description: Internal Server Error
+ */
+export async function DELETE(req: NextRequest) {
+    const id = +(req.nextUrl.pathname.split('/').pop() + "");
 
-            if (!bodyContent) {
-                return res.status(404).json({ error: 'BodyContent not found' });
-            }
+    const session = await getSession();
+    if (!session) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      }
 
-            return res.status(200).json({ bodyContent });
-        } catch (error) {
-            return res.status(500).json({ error: 'Internal Server Error' });
-        }
+    try {
+        const deletedBodyContent = await db.bodyContent.delete({
+            where: {
+                id: id,
+            },
+        });
+
+        return NextResponse.json({ message: 'BodyContent deleted successfully' }, { status: 200 });
+    } catch (error) {
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
-
-    /**
-     * 
-     * @swagger
-     * /api/body-content/{id}:
-     *   delete:
-     *     summary: Delete body content
-     *     parameters:
-     *       - name: id
-     *         in: path
-     *         required: true
-     *         description: ID of the body content
-     *         schema:
-     *           type: string
-     *     responses:
-     *       200:
-     *         description: Body content deleted successfully
-     *       404:
-     *         description: Body content not found
-     *       500:
-     *         description: Internal Server Error
-     *       401:
-     *         description: Unauthorized
-     *       405:
-     *         description: Method Not Allowed
-     */
-    if (req.method === 'DELETE') {
-        try {
-            const deletedBodyContent = await db.bodyContent.delete({
-                where: {
-                    id: +(id as string),
-                },
-            });
-
-            return res.status(200).json({ message: 'BodyContent deleted successfully' });
-        } catch (error) {
-            return res.status(500).json({ error: 'Internal Server Error' });
-        }
-    }
-
-    return res.status(405).json({ error: 'Method Not Allowed' });
 }

@@ -1,6 +1,6 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 import { db } from "@/lib/db";
-import { getSession } from '../../actions';
+
 
 /**
  * 
@@ -20,30 +20,18 @@ import { getSession } from '../../actions';
  *         description: Titles retrieved successfully
  *       500:
  *         description: Internal Server Error
- *       401:
- *         description: Unauthorized
- *       405:
- *         description: Method Not Allowed
  */
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export async function handler(req: NextRequest) {
     const MAX_DEFAULT_LIMIT = 20;
-    const session = await getSession();
-    if (!session) {
-        return res.status(401).json({ error: 'Unauthorized' });
+
+    try {
+        const { limit } = await req.json();
+        const titles = await db.title.findMany({
+            take: limit ? +(limit as string) : MAX_DEFAULT_LIMIT,
+        });
+
+        return NextResponse.json({ titles }, { status: 200 });
+    } catch (error) {
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
-
-    if (req.method === 'GET') {
-        try {
-            const { limit } = req.query;
-            const titles = await db.title.findMany({
-                take: limit ? +(limit as string) : MAX_DEFAULT_LIMIT,
-            });
-
-            return res.status(200).json({ titles });
-        } catch (error) {
-            return res.status(500).json({ error: 'Internal Server Error' });
-        }
-    }
-
-    return res.status(405).json({ error: 'Method Not Allowed' });
 }
