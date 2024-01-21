@@ -22,7 +22,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onFocus, onBlur, idToHide }) => {
     } else {
       router.push('#');
     }
-  }, [isClicked]);
+  }, [isClicked, idToHide, router]);
 
     const handleClick = () => {
         if (!isClicked) {
