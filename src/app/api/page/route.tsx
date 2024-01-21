@@ -8,6 +8,7 @@ import { getSession } from '../../actions';
  * /api/page:
  *   get:
  *     summary: Get all pages
+ *     description: Returns all pages and their adjacent information.
  *     parameters:
  *       - name: limit
  *         in: query
@@ -62,13 +63,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 },
             });
 
-            const newPages = pages.map((page) => {
+            const newPages = pages.map((page: { Heading: any[]; }) => {
                 interface HeadingPosition {
                     [key: number]: any;
                 }
 
                 const latestHeadings = Object.values(
-                    page.Heading.reduce((acc: HeadingPosition, heading) => {
+                    page.Heading.reduce((acc: HeadingPosition, heading: { position: number; createdAt: string | number | Date; }) => {
                         if (!acc[heading.position] || new Date(heading.createdAt) > new Date(acc[heading.position].createdAt)) {
                             acc[heading.position] = heading;
                         }

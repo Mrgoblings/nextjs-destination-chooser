@@ -69,6 +69,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
      * /api/page/{id}:
      *   get:
      *     summary: Get page information
+     *     description: Returns the page and its adjacent information.
      *     parameters:
      *       - name: id
      *         in: path
@@ -128,7 +129,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
 
             const latestHeadings = Object.values(
-                page.Heading.reduce((acc: HeadingPosition, heading) => {
+                page.Heading.reduce((acc: HeadingPosition, heading: { position: number; createdAt: string | number | Date; }) => {
                     if (!acc[heading.position] || new Date(heading.createdAt) > new Date(acc[heading.position].createdAt)) {
                         acc[heading.position] = heading;
                     }
