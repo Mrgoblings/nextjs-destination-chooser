@@ -26,6 +26,7 @@ import { getSession } from '../../actions';
  *         description: Method Not Allowed
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    const MAX_DEFAULT_LIMIT = 20;
     const session = await getSession();
     if (!session) {
         return res.status(401).json({ error: 'Unauthorized' });
@@ -35,7 +36,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         try {
             const { limit } = req.query;
             const pages = await db.page.findMany({
-                take: limit ? +(limit as string) : undefined,
+                take: limit ? +(limit as string) : MAX_DEFAULT_LIMIT,
+                include: {
+                    Title: true,
+                    Heading: {
+                        include: {
+                            BodyContent: true,
+                        },
+                    },
+                },
             });
 
             return res.status(200).json({ pages });

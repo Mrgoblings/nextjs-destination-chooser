@@ -94,6 +94,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 where: {
                     id: +(id as string),
                 },
+                include: {
+                    Title: true,
+                    Heading: {
+                        include: {
+                            BodyContent: true,
+                        },
+                    },
+                },
             });
 
             if (!page) {
