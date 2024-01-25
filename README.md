@@ -1,4 +1,4 @@
-# Website Page Builder
+# Markdown Webpage Builder
 
 This project is a website page builder that uses markdown format. It allows users to create and customize web pages using a simple and intuitive markdown syntax. The generated pages can be previewed and published.
 
