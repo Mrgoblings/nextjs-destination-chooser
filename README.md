@@ -39,6 +39,10 @@ To try out the project, follow these steps:
 
 - Coming soon: An enhanced page builder with additional features will be available in future updates.
 
+## Component Library
+
+This project utilizes the beautifully designed components from the [shadcn library](https://ui.shadcn.com/). These components are accessible, customizable, and open source. You can easily copy and paste them into your own applications.
+
 ## Project Structure
 
 The main application code is located in the `src/` directory. This directory contains all the page components, reusable React components, utility functions, configurations, and other code related to the Next.js application.
