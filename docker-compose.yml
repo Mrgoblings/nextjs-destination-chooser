@@ -22,6 +22,13 @@ services:
     environment:
       DATABASE_URL: "mysql://usser:passs@mysql:3306/db_name"
       SHADOW_DATABASE_URL: "mysql://usser:passs@mysql:3306/db_name"
+      NEXTAUTH_URL: 'http://localhost:3000/api/auth'
+
+      NEXTAUTH_SECRET: '<a_random_secret>'
+      GITHUB_ID: '<your_github_id>'
+      GITHUB_SECRET: '<your_github_secret>'
+      GOOGLE_ID: '<your_google_id>'
+      GOOGLE_SECRET: '<your_google_secret>'
     ports:
       - 3000:3000
     networks:
