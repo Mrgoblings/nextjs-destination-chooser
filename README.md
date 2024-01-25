@@ -41,7 +41,7 @@ To try out the project, follow these steps:
 
 ## Project Structure
 
-The main application code is located in the `src/app` directory. This directory contains all the page components, reusable React components, utility functions, configurations, and other code related to the Next.js application.
+The main application code is located in the `src/` directory. This directory contains all the page components, reusable React components, utility functions, configurations, and other code related to the Next.js application.
 
 The `src/app/` directory is where you can find the page components.
 
