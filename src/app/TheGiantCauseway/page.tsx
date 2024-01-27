@@ -36,16 +36,16 @@ const TheGiantCauseway: React.FC = () => {
             />
 
             <Heading className='mx-auto px-30'>{`
-                ![The Giant's Causeway img](http://localhost:3000/gc-2.jpg)
+                ![The Giant's Causeway img](https://nomadnetworks.vercel.app/gc-2.jpg)
             `}</Heading>
 
             <HeadingBodyBlock
                 heading="How it was formed"
                 subheading='Geological history of the place'
                 body={`
-                    ![The Giant's Causeway img](http://localhost:3000/the_new_theory.png)
+                    ![The Giant's Causeway img](https://nomadnetworks.vercel.app/the_new_theory.png)
                     <br></br>‎<br></br>
-                    ![The Giant's Causeway img](http://localhost:3000/formation.png)
+                    ![The Giant's Causeway img](https://nomadnetworks.vercel.app/formation.png)
                 `}
             />
             
@@ -59,12 +59,12 @@ const TheGiantCauseway: React.FC = () => {
 
             <Heading className='mx-auto px-10 min-w-'>
             {`
-                ![The Giant's Causeway img](http://localhost:3000/legend.jpg)
+                ![The Giant's Causeway img](https://nomadnetworks.vercel.app/legend.jpg)
             `}
             </Heading>
             {/* <Heading className='mx-auto px-20 min-w-'>
             {`
-                ![The Giant's Causeway img](http://localhost:3000/location.png)
+                ![The Giant's Causeway img](https://nomadnetworks.vercel.app/location.png)
             `}
             </Heading> */}
 
@@ -72,7 +72,7 @@ const TheGiantCauseway: React.FC = () => {
             <HeadingBodyBlock
                 heading="Itinerary"
                 body={`
-                    ![The Giant's Causeway img](http://localhost:3000/location.png)
+                    ![The Giant's Causeway img](https://nomadnetworks.vercel.app/location.png)
                     ‎ <br></br>‎ <br></br>‎ <br></br>
                     <br></br>
                     1. **Transportation**: By plane, departing from Sofia Airport to Dublin with a transfer in Munich. Total travel time: 5 hours and 55 minutes.
@@ -89,7 +89,7 @@ const TheGiantCauseway: React.FC = () => {
 
             {/* <Heading className='mx-auto max-w-3xl'>
             {`
-                ![The Giant's Causeway img](http://localhost:3000/money.png)
+                ![The Giant's Causeway img](https://nomadnetworks.vercel.app/money.png)
             `}
             </Heading> */}
 
